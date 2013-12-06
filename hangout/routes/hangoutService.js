@@ -16,7 +16,9 @@ function getHangoutModel(){
     }
     var hangoutSchema = Schema({
         "gid": String,
-        "fbid": String
+        "fbid": String,
+        "hoURL": String,
+        "jvid": String
     });
     HangoutModel = mongoose.model('Hangout', hangoutSchema);
     return HangoutModel;
@@ -28,38 +30,46 @@ function find(gid, callback){
 }
 
 //find with the gid.
-function findOne(gid, callback){
+function findOneWithGID(gid, callback){
     getHangoutModel().findOne({ "gid": gid }, callback);
 }
 
+function findOneWithJVID(jvid,callback){
+    getHangoutModel().findOne({ "jvid": jvid }, callback);
+}
+
 //save the data.
-function save(gid,fbid,callback){
+function save(gid,fbid,hoURL,jvid, callback){
     var hangout = new getHangoutModel()({
         "gid": gid,
-        "fbid": fbid
+        "fbid": fbid,
+        "hoURL": hoURL,
+        "jvid": jvid
     });
     hangout.save(callback);
 }
 
 //update the data.
-function update(gid,fbid,callback){
-    getHangoutModel().update({"gid":gid},{"fbid":fbid},callback);
+function update(gid,fbid,hoURL,jvid,callback){
+    getHangoutModel().update({"gid":gid},{"fbid":fbid, "hoURL":hoURL, "jvid":jvid},callback);
 }
 
 
-module.exports.hangoutServiceAdd = function(gid, fbid, callback){
-    findOne(gid,function(err, hangout){
-        debugger;
+module.exports.hangoutServiceAdd = function(gid, fbid, hoURL, jvid, callback){
+    findOneWithGID(gid,function(err, hangout){
         if(err||hangout===null){
-            save(gid,fbid,callback)
+            save(gid,fbid,hoURL, jvid, callback);
         }else{
-            update(gid,fbid,callback)
+            update(gid,fbid,hoURL, jvid,callback);
         }
 
     })
 }
 
+module.exports.hangoutServiceGetFbID = function(gid, callback){
+    findOneWithGID(gid,callback);
+}
 
-module.exports.hangoutServiceGet = function(gid, callback){
-    findOne(gid,callback);
+module.exports.hangoutServiceGetHangoutURL = function(jvid,callback){
+    findOneWithJVID(jvid,callback);
 }

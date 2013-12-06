@@ -39,8 +39,13 @@ function setHeader(req, res, next){
 
 app.get('/', routes.index);
 //app.get('/users', user.list);
-app.all('/broadcasts/:ho_id/:fb_id', setHeader, hangout.saveIds);
-app.all('/broadcasts/:ho_id', setHeader, hangout.getIds);
+app.all('/broadcasts/:ho_id/:fb_id/:ho_url/:jv_id', setHeader, hangout.saveIds);
+
+//jobseeker needs it to query to get the fbId
+app.all('/broadcasts/:ho_id', setHeader, hangout.getfbIds);
+
+//jobseeker needs it to get the hangout url
+app.all('/hangoutURL/:jv_id', setHeader, hangout.getHangoutUrl);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
