@@ -8,6 +8,7 @@ var routes = require('./routes');
 var user = require('./routes/user');
 var http = require('http');
 var path = require('path');
+var hangout = require('./routes/hangout');
 
 var app = express();
 
@@ -31,7 +32,9 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/', routes.index);
-app.get('/users', user.list);
+//app.get('/users', user.list);
+app.post('/broadcasts/:ho_id/:fb_id', hangout.saveIds);
+app.get('/broadcasts/:ho_id', hangout.getIds);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
