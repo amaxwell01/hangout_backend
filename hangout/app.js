@@ -31,10 +31,16 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
+function setHeader(req, res, next){
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    next();
+}
+
 app.get('/', routes.index);
 //app.get('/users', user.list);
-app.get('/broadcasts/:ho_id/:fb_id', hangout.saveIds);
-app.get('/broadcasts/:ho_id', hangout.getIds);
+app.all('/broadcasts/:ho_id/:fb_id', setHeader, hangout.saveIds);
+app.all('/broadcasts/:ho_id', setHeader, hangout.getIds);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
