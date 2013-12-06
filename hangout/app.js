@@ -33,7 +33,7 @@ if ('development' == app.get('env')) {
 
 app.get('/', routes.index);
 //app.get('/users', user.list);
-app.post('/broadcasts/:ho_id/:fb_id', hangout.saveIds);
+app.get('/broadcasts/:ho_id/:fb_id', hangout.saveIds);
 app.get('/broadcasts/:ho_id', hangout.getIds);
 
 http.createServer(app).listen(app.get('port'), function(){
